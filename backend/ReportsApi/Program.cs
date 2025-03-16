@@ -15,6 +15,13 @@ builder.Services.AddCors(options =>
     });
 });
 
+var keycloakAddress = "keycloak";
+
+if (builder.Environment.IsDevelopment())
+{
+    keycloakAddress = "localhost";
+}
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -23,16 +30,16 @@ builder.Services.AddAuthentication(options =>
     .AddJwtBearer(options =>
     {
         IdentityModelEventSource.ShowPII = true;
-        options.Authority = "http://localhost:8080/realms/reports-realm";
+        options.Authority = $"http://{keycloakAddress}:8080/realms/reports-realm";
         options.Audience = "reports-api";
         options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
+            ValidateIssuer = false,
             ValidateLifetime = true,
             ValidateAudience = false,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "http://localhost:8080/realms/reports-realm",
+            ValidIssuer = $"http://{keycloakAddress}:8080/realms/reports-realm",
             RoleClaimType = "roles"
         };
         
