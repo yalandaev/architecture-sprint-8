@@ -1,0 +1,6 @@
+﻿services:
+  reportsapi:
+    image: reportsapi
+    build:
+      context: .
+      dockerfile: Dockerfile
